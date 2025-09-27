@@ -7,9 +7,16 @@ export async function handler(event) {
 				body: JSON.stringify({ error: "Invalid ingredients" }),
 			};
 		}
-		const ingredientsString = ingredients.join(", ");
 
-		const prompt = `You are an assistant that receives a list of ingredients that a user has and suggests a recipe they could make with some or all of those ingredients. You don't need to use every ingredient they mention in your recipe. The recipe can include additional ingredients they didn't mention, but try not to include too many extra ingredients. Format your response in markdown to make it easier to render to a web page, (here goes the user )=> I have ${ingredientsString}. Please give me a recipe you'd recommend I make!`;
+		const prompt = `You are a recipe generator. 
+I will give you a list of ingredients I have. 
+You must give **only one recipe**, formatted in plain text or markdown, using the ingredients provided. 
+Do not add commentary, suggestions, or extra notes. 
+Use only the ingredients listed (or a minimal number of common pantry items if necessary). 
+Ingredients: ${ingredients.join(
+			", "
+		)} Format the recipe with "Ingredients" and "Instructions" headings in Markdown.
+`;
 
 		const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
 			method: "POST",
